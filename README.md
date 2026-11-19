@@ -53,7 +53,7 @@ Visit http://localhost:5173. The frontend defaults to API URL http://localhost:5
 - PATCH `/api/admin/bookings/:id/status` — update booking status
 
 ## Admin account
-Registration creates a normal user. For local development only, update that user's `role` to `admin` in the MongoDB database to test admin endpoints.
+Registration creates a normal user. The frontend exposes the My Bookings page to signed-in users and the Admin dashboard to admin users. For local development only, update that user's `role` to `admin` in the MongoDB database to test admin endpoints.
 
 ## Security and scope
 Never commit real secrets or `.env`. Do not use real payment details or sensitive user data. This is an educational starter, not a production booking platform. Add automated tests, rate limiting, stronger validation, password recovery, email verification, booking-capacity concurrency controls, and production deployment hardening before real-world use.
