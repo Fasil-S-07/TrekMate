@@ -23,6 +23,8 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [view, setView] = useState(null);
 
+  useEffect(() => { if (view) document.getElementById("dashboard")?.scrollIntoView({ behavior: "smooth", block: "start" }); }, [view]);
+
   useEffect(() => {
     api("/treks").then(data => { if (Array.isArray(data) && data.length) setTreks(data); }).catch(() => {});
   }, []);
