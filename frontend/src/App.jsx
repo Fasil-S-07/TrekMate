@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Mountain, MapPin, Clock3, Users, ArrowRight, Search, Menu, X, Compass, ShieldCheck, Footprints, CalendarDays } from "lucide-react";
 import { api } from "./api";
+import Dashboard from "./Dashboard.jsx";
 
 const demoTreks = [
   { _id: "demo-1", name: "Kudremukh Peak", location: "Chikkamagaluru, Karnataka", durationDays: 2, difficulty: "Moderate", price: 2499, capacity: 12, description: "Walk through rolling grasslands, shola forests and misty mountain ridges.", imageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85" },
@@ -20,6 +21,7 @@ function App() {
   const [selectedTrek, setSelectedTrek] = useState(null);
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [view, setView] = useState(null);
 
   useEffect(() => {
     api("/treks").then(data => { if (Array.isArray(data) && data.length) setTreks(data); }).catch(() => {});
@@ -64,7 +66,7 @@ function App() {
       <a className="brand" href="#"><span className="brand-mark"><Mountain size={22}/></span><span>TREK<span className="brand-light">MATE</span></span></a>
       <button className="mobile-menu" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle navigation">{menuOpen ? <X/> : <Menu/>}</button>
       <nav className={menuOpen ? "nav-links open" : "nav-links"}>
-        <a href="#explore" onClick={() => setMenuOpen(false)}>Explore treks</a><a href="#why" onClick={() => setMenuOpen(false)}>Why TrekMate</a><a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
+        <a href="#explore" onClick={() => setMenuOpen(false)}>Explore treks</a><a href="#why" onClick={() => setMenuOpen(false)}>Why TrekMate</a><a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>{user && <button className="nav-dashboard-link" onClick={() => { setView("bookings"); setMenuOpen(false); }}>My bookings</button>}{user?.role === "admin" && <button className="nav-dashboard-link" onClick={() => { setView("admin"); setMenuOpen(false); }}>Admin</button>}
       </nav>
       <div className="nav-actions">
         {user ? <><span className="welcome">Hi, {user.name.split(" ")[0]}</span><button className="btn btn-outline small" onClick={signOut}>Sign out</button></> : <><button className="btn btn-ghost" onClick={() => setModal("login")}>Log in</button><button className="btn btn-primary small" onClick={() => setModal("register")}>Join now <ArrowRight size={15}/></button></>}
@@ -93,6 +95,7 @@ function App() {
 
       <section className="why-section" id="why"><div className="why-inner"><div className="eyebrow"><span className="eyebrow-line"></span> MORE THAN A JOURNEY</div><h2>Make memories.<br/><em>Not just miles.</em></h2><p className="why-copy">TrekMate brings your trekking plans together in one place. Discover trails, understand the challenge, and make a booking when you are ready.</p><div className="feature-grid"><div className="feature"><span><Compass/></span><h3>Find your trail</h3><p>Explore trek options by location and difficulty level.</p></div><div className="feature"><span><ShieldCheck/></span><h3>Plan with clarity</h3><p>Review duration, group capacity and listed prices before booking.</p></div><div className="feature"><span><Footprints/></span><h3>One step at a time</h3><p>Keep your adventure plans organised in one place.</p></div></div></div></section>
       <section className="contact-section" id="contact"><div><div className="eyebrow dark"><span className="eyebrow-line"></span> READY TO GO?</div><h2>Your next adventure<br/>is out there.</h2></div><a className="btn btn-primary" href="#explore">Find a trek <ArrowRight size={17}/></a></section>
+    {view && <Dashboard view={view} user={user} onClose={() => setView(null)} onNotice={setNotice} />}
     </main>
     <footer><a className="brand footer-brand" href="#"><span className="brand-mark"><Mountain size={20}/></span>TREK<span className="brand-light">MATE</span></a><span>Explore responsibly. Leave only footprints.</span><span>© {new Date().getFullYear()} TrekMate Student Project</span></footer>
 
