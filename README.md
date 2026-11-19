@@ -28,13 +28,17 @@ cd backend
 cp .env.example .env
 # Edit .env and set MONGODB_URI and a long random JWT_SECRET
 npm install
+npm run seed
 npm run dev
 ```
+
+The seed command inserts three example treks into MongoDB. Run it again whenever you want to restore/update those sample listings.
 
 ### Frontend (second terminal)
 ```bash
 cd frontend
 npm install
+cp .env.example .env
 npm run dev
 ```
 Visit http://localhost:5173. The frontend defaults to API URL http://localhost:5000/api; override with `frontend/.env` using `VITE_API_URL`.
@@ -53,7 +57,7 @@ Visit http://localhost:5173. The frontend defaults to API URL http://localhost:5
 - PATCH `/api/admin/bookings/:id/status` — update booking status
 
 ## Admin account
-Registration creates a normal user. The frontend exposes the My Bookings page to signed-in users and the Admin dashboard to admin users. For local development only, update that user's `role` to `admin` in the MongoDB database to test admin endpoints.
+Registration creates a normal user. The frontend exposes the My Bookings page to signed-in users and the Admin dashboard to admin users. For local development only, update that user's `role` to `admin` in the MongoDB database to test admin endpoints. For example, in `mongosh` connected to the `trekmate` database, run `db.users.updateOne({ email: "you@example.com" }, { $set: { role: "admin" } })` with your registered email.
 
 ## Security and scope
 Never commit real secrets or `.env`. Do not use real payment details or sensitive user data. This is an educational starter, not a production booking platform. Add automated tests, rate limiting, stronger validation, password recovery, email verification, booking-capacity concurrency controls, and production deployment hardening before real-world use.
